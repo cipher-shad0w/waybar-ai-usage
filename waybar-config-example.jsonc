@@ -1,0 +1,39 @@
+// Waybar Configuration Example
+// Add this configuration to the modules section of ~/.config/waybar/config.jsonc
+//
+// After installing with: uv tool install waybar-ai-usage
+// Or for development mode, use the full path with uv run
+
+{
+  // Claude Code Usage Monitor
+  "custom/claude-usage": {
+    // After 'uv tool install waybar-ai-usage':
+    "exec": "claude-usage --waybar",
+
+    // Or for development mode:
+    // "exec": "uv run --directory /home/YOUR_USER/Codes/waybar-ai-usage python claude.py --waybar",
+
+    "return-type": "json",
+    "interval": 120,  // Refresh every 2 minutes
+    "format": "{}",
+    "tooltip": true,
+    "on-click": "pkill -RTMIN+8 waybar",  // Click to refresh immediately
+    "signal": 8  // Refresh when receiving signal 8
+  },
+
+  // OpenAI Codex CLI Usage Monitor
+  "custom/codex-usage": {
+    // After 'uv tool install waybar-ai-usage':
+    "exec": "codex-usage --waybar",
+
+    // Or for development mode:
+    // "exec": "uv run --directory /home/YOUR_USER/Codes/waybar-ai-usage python codex.py --waybar",
+
+    "return-type": "json",
+    "interval": 120,  // Refresh every 2 minutes
+    "format": "{}",
+    "tooltip": true,
+    "on-click": "pkill -RTMIN+9 waybar",  // Click to refresh immediately
+    "signal": 9  // Refresh when receiving signal 9
+  }
+}
