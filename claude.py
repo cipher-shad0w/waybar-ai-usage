@@ -84,9 +84,14 @@ def print_cli(usage: dict) -> None:
     fh = parse_window_percent(usage.get("five_hour"))
     sd = parse_window_percent(usage.get("seven_day"))
 
+    def _fmt_reset(win):
+        if win.utilization == 0 and win.resets_at is None:
+            return "Not started"
+        return format_eta(win.resets_at)
+
     print("-" * 40)
-    print(f"5-hour : {fh.utilization:.1f}%  (Reset in {format_eta(fh.resets_at)})")
-    print(f"7-day  : {sd.utilization:.1f}%  (Reset in {format_eta(sd.resets_at)})")
+    print(f"5-hour : {fh.utilization:.1f}%  (Reset in {_fmt_reset(fh)})")
+    print(f"7-day  : {sd.utilization:.1f}%  (Reset in {_fmt_reset(sd)})")
 
 
 def print_waybar(usage: dict) -> None:
@@ -119,6 +124,8 @@ def print_waybar(usage: dict) -> None:
 
         pct = int(round(target.utilization))
 
+        window_not_started = (target.utilization == 0 and target.resets_at is None)
+
         # Check if window is unused (utilization == 0 and reset time near window length)
         is_unused = False
         if target.utilization == 0 and target.resets_at:
@@ -142,7 +149,7 @@ def print_waybar(usage: dict) -> None:
 
         icon = "<span foreground='#DE7356' size='large'>󰜡</span>"
 
-        if is_unused:
+        if is_unused or window_not_started:
             text = f"{icon} Ready"
         else:
             eta = format_eta(target.resets_at)

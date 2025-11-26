@@ -14,16 +14,13 @@ class WindowUsage:
 
 
 def parse_window_percent(raw: Mapping[str, object] | None, key: str = "utilization") -> WindowUsage:
-    """Parse window with utilization as percentage (0-100) - used by Claude."""
+    """Parse window where Claude returns utilization as 0–100% (may be float)."""
     raw = raw or {}
     util = raw.get(key) or 0
     resets = raw.get("resets_at")
 
     try:
         util_f = float(util)
-        # Claude API returns 0.0-1.0, convert to percentage
-        if util_f <= 1.0 and util_f > 0:
-            util_f *= 100
     except Exception:
         util_f = 0.0
 
